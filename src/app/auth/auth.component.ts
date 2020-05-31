@@ -44,26 +44,34 @@ export class AuthComponent implements OnDestroy {
     let authObs: Observable<AuthResponseData>;
 
     this.isLoading = true;
+    let isLogged = false;
 
     if (this.isLoginMode) {
-      authObs = this.authService.login(email, password);
+      //  authObs = this.authService.login(email, password);
+       isLogged = this.authService.login(email, password);
     } else {
       authObs = this.authService.signup(email, password);
     }
 
-    authObs.subscribe(
-      resData => {
-        console.log(resData);
-        this.isLoading = false;
-        this.router.navigate(['/recipes']);
-      },
-      errorMessage => {
-        console.log(errorMessage);
-        this.error = errorMessage;
-        this.showErrorAlert(errorMessage);
-        this.isLoading = false;
-      }
-    );
+    if(isLogged){
+      this.isLoading = false;
+      this.router.navigate(['/recipes']);
+    }else {
+        authObs.subscribe(
+              resData => {
+                console.log(resData);
+                this.isLoading = false;
+                this.router.navigate(['/recipes']);
+              },
+              errorMessage => {
+                console.log(errorMessage);
+                this.error = errorMessage;
+                this.showErrorAlert(errorMessage);
+                this.isLoading = false;
+              }
+            );
+    }
+   
 
     form.reset();
   }

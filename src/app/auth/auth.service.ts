@@ -48,26 +48,28 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    return this.http
-      .post<AuthResponseData>(
-        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=' + environment.firebaseAPIKey,
-        {
-          email: email,
-          password: password,
-          returnSecureToken: true
-        }
-      )
-      .pipe(
-        catchError(this.handleError),
-        tap(resData => {
-          this.handleAuthentication(
-            resData.email,
-            resData.localId,
-            resData.idToken,
-            +resData.expiresIn
-          );
-        })
-      );
+    // return this.http
+    //   .post<AuthResponseData>(
+    //     'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=' + environment.firebaseAPIKey,
+    //     {
+    //       email: email,
+    //       password: password,
+    //       returnSecureToken: true
+    //     }
+    //   )
+    //   .pipe(
+    //     catchError(this.handleError),
+    //     tap(resData => {
+    //       this.handleAuthentication(
+    //         resData.email,
+    //         resData.localId,
+    //         resData.idToken,
+    //         +resData.expiresIn
+    //       );
+    //     })
+    //   );
+    this.handleAuthentication('email@email.com', 'gbarska', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',99999999999999)
+    return true;
   }
 
   autoLogin() {
