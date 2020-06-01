@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 
 import { AuthComponent } from './auth.component';
 import { SharedModule } from '../shared/shared.module';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './store/auth.effects';
 
 @NgModule({
   declarations: [AuthComponent],
@@ -12,7 +14,8 @@ import { SharedModule } from '../shared/shared.module';
     CommonModule,
     FormsModule,
     RouterModule.forChild([{ path: '', component: AuthComponent }]),
-    SharedModule
+    SharedModule,
+    // EffectsModule.forRoot([AuthEffects])
   ]
 })
 export class AuthModule {}

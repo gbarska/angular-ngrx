@@ -25,3 +25,7 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+https://cdn.pixabay.com/photo/2017/11/08/22/18/spaghetti-2931846_960_720.jpg
+
+npm install --save @ngrx/effects
