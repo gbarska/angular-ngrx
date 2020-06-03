@@ -1,67 +1,62 @@
 import { Action } from '@ngrx/store';
 
-export const LOGIN_START = '[AUTH]_LOGIN_START';
-export const AUTHENTICATE_SUCCESS = '[AUTH]_AUTHENTICATE_SUCCESS';
-export const AUTHENTICATE_FAIL = '[AUTH]_AUTHENTICATE_FAIL';
-export const LOGOUT = '[AUTH]_LOGOUT';
-export const SIGNUP_START = '[AUTH]_SIGNUP_START';
-export const CLEAR_ERROR = '[AUTH]_CLEAR_ERROR';
-export const AUTO_LOGIN = '[AUTH]_AUTO_LOGIN';
-export const AUTO_LOGOUT = '[AUTH]_AUTO_LOGOUT';
+export const LOGIN_START = '[Auth] Login Start';
+export const AUTHENTICATE_SUCCESS = '[Auth] Login';
+export const AUTHENTICATE_FAIL = '[Auth] Login Fail';
+export const SIGNUP_START = '[Auth] Signup Start';
+export const CLEAR_ERROR = '[Auth] Clear Error';
+export const AUTO_LOGIN = '[Auth] Auto Login';
+export const LOGOUT = '[Auth] Logout';
 
 export class AuthenticateSuccess implements Action {
-    readonly type = AUTHENTICATE_SUCCESS;
+  readonly type = AUTHENTICATE_SUCCESS;
 
-    constructor(
-        public  payload: {
-           email: string,
-           userId: string,
-           token: string,
-           expirationDate: Date
-        }) {}
+  constructor(
+    public payload: {
+      email: string;
+      userId: string;
+      token: string;
+      expirationDate: Date;
+      redirect: boolean;
+    }
+  ) {}
 }
 
 export class Logout implements Action {
-    readonly type = LOGOUT;
+  readonly type = LOGOUT;
+}
+
+export class LoginStart implements Action {
+  readonly type = LOGIN_START;
+
+  constructor(public payload: { email: string; password: string }) {}
+}
+
+export class AuthenticateFail implements Action {
+  readonly type = AUTHENTICATE_FAIL;
+
+  constructor(public payload: string) {}
+}
+
+export class SignupStart implements Action {
+  readonly type = SIGNUP_START;
+
+  constructor(public payload: { email: string; password: string }) {}
 }
 
 export class ClearError implements Action {
   readonly type = CLEAR_ERROR;
 }
+
 export class AutoLogin implements Action {
   readonly type = AUTO_LOGIN;
 }
 
-export class AutoLogout implements Action {
-  readonly type = AUTO_LOGOUT;
-}
-
-
-export class LoginStart implements Action {
-    readonly type = LOGIN_START;
-
-    constructor(public payload: { email: string; password: string }) {}
-  }
-
-export class AuthenticateFail implements Action {
-    readonly type = AUTHENTICATE_FAIL;
-
-    constructor(public payload: string) {}
-  }
-
-export class SignupStart implements Action{
-  readonly type = SIGNUP_START;
-
-  constructor(public payload: { email: string; password: string }) {}
-
-}
-
-export type Actions = AuthenticateSuccess |
- Logout |
- LoginStart |
- AuthenticateFail |
- SignupStart | 
- ClearError | 
- AutoLogin |
- AutoLogout;
-
+export type AuthActions =
+  | AuthenticateSuccess
+  | Logout
+  | LoginStart
+  | AuthenticateFail
+  | SignupStart
+  | ClearError
+  | AutoLogin;

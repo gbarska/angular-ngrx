@@ -62,10 +62,11 @@ const handleAuthentication = (
   const user = new User(email, userId, token, expirationDate);
   localStorage.setItem('userData', JSON.stringify(user));
   return new AuthActions.AuthenticateSuccess({
-    email: email,
-    userId: userId,
-    token: token,
-    expirationDate: expirationDate
+    email,
+    userId,
+    token,
+    expirationDate,
+    redirect: true
   });
 };
 
@@ -108,9 +109,9 @@ export class AuthEffects {
           }
         )
         .pipe(
-          // tap(resData => {
-          //   this.authService.setLogoutTimer(+resData.expiresIn * 1000);
-          // }),
+          tap(resData => {
+            this.authService.setLogoutTimer(+resData.expiresIn * 1000);
+          }),
           map(resData => {
             return handleAuthentication(
               +resData.expiresIn,
@@ -129,8 +130,10 @@ export class AuthEffects {
   @Effect({ dispatch: false })
   authRedirect = this.actions$.pipe(
     ofType(AuthActions.AUTHENTICATE_SUCCESS),
-    tap(() => {
-      this.router.navigate(['/']);
+    tap((authSuccessAction: AuthActions.AuthenticateSuccess) => {
+      if (authSuccessAction.payload.redirect) {
+         this.router.navigate(['/']);
+      }
     })
   );
 
@@ -143,12 +146,12 @@ export class AuthEffects {
   //   { dispatch: false }
   //   // FeatureActions.actionOne is not dispatched
   // );
- 
+
   @Effect()
   authLogin = this.actions$.pipe(
     ofType(AuthActions.LOGIN_START),
 
-    //prod uncomment
+    // prod uncomment
     // switchMap((authData: AuthActions.LoginStart) => {
     //   return this.http
     //     .post<AuthResponseData>(
@@ -161,25 +164,28 @@ export class AuthEffects {
     //       }
     //     )
 
-    //mocked 1
+    // mocked 1
     switchMap((authData: AuthActions.LoginStart) => {
       return locations
-      //end mocked 1
+      // end mocked 1
         .pipe(
+          //  tap(resData => {
+          //     this.authService.setLogoutTimer(+resData.expiresIn * 1000);
+          //   }),
           map(resData => {
             return handleAuthentication(
-              //prod uncomment
+              // prod uncomment
               // +resData.expiresIn,
               // resData.email,
               // resData.localId,
               // resData.idToken
-              
-              //mocked 2
+
+              // mocked 2
               9999999,
               'gbarska@email.com',
               'gbarska',
               'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
-              //end mocked 2
+              // end mocked 2
             );
           }),
           catchError(errorRes => {
@@ -213,7 +219,6 @@ export class AuthEffects {
       );
 
       if (loadedUser.token) {
-        // this.user.next(loadedUser);
         const expirationDuration =
           new Date(userData._tokenExpirationDate).getTime() -
           new Date().getTime();
@@ -223,7 +228,8 @@ export class AuthEffects {
           email: loadedUser.email,
           userId: loadedUser.id,
           token: loadedUser.token,
-          expirationDate: new Date(userData._tokenExpirationDate)
+          expirationDate: new Date(userData._tokenExpirationDate),
+          redirect: false
         });
       }
       return { type: 'DUMMY' };
